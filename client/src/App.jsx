@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/home/Home.jsx';
 import Navbar from './components/nav/Nav.jsx';
 import UserManagement from './pages/usersManagement/Users.management.jsx';
-import Userlogin from './pages/user/user.login.jsx';
+import Userlogin from './pages/user/User.login.jsx';
 import Usersignup from './pages/user/User.signup.jsx';
 import AthleteProfile from './pages/athleteProfile/AthleteProfile.jsx';
 import About from './pages/about/About.jsx';

@@ -53,6 +53,47 @@ export const Form = styled.form`
     gap: 14px;
 `;
 
+export const GridTwo = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+`;
+
+export const GridThree = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+`;
+
+export const ErrorBox = styled.div`
+    color: var(--danger);
+    font-size: 12px;
+    margin-top: 4px;
+`;
+
+export const Spacer = styled.div`
+    margin-top: 12px;
+`;
+
+export const Message = styled.div`
+    font-size: 14px;
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+`;
+
+export const ErrorMessage = styled(Message)`
+    color: var(--danger);
+    background: rgba(255, 77, 94, 0.08);
+    border: 1px solid rgba(255, 77, 94, 0.3);
+`;
+
+export const SuccessMessage = styled(Message)`
+    color: var(--ok);
+    background: rgba(77, 255, 181, 0.08);
+    border: 1px solid rgba(77, 255, 181, 0.3);
+`;
+
 export const Label = styled.label`
     font-weight: 600;
     color: var(--muted);

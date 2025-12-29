@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import * as S from './users.js'
 import CoachUserTrainings from '../../components/coach/CoachUserTrainings.jsx';
 import { getPositionsForSport } from '../../utils/positions';
+import * as UM from './UsersModal.styles.js';
 const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
 function Users(){
     const [users, setUsers] = useState([]);
@@ -14,72 +15,46 @@ function Users(){
     const [filterClub, setFilterClub] = useState('');
 
     useEffect(() => {
-        fetch(`${BASE_URL}/api/users/getUsers`, {
-            credentials: 'include'
-        })
-        .then(res => {
-            if (!res.ok) throw new Error("Error cargando usuarios");
-            return res.json()
-        })
-        .then(data => {
-            console.log('Respuesta de la Api: ', data)
-            setUsers(data.Usuarios);
-        })
-        .catch(err => setError(err.message))
-        .finally(() => setLoading(false))
+        async function loadUsers(){
+            setLoading(true);
+            try{
+                const res = await fetch(`${BASE_URL}/api/users/getUsers`, { credentials: 'include' });
+                if(!res.ok) throw new Error('No fue posible obtener usuarios');
+                const data = await res.json();
+                // el backend responde { Usuarios: [...] }
+                setUsers(data.Usuarios || []);
+            }catch(err){
+                console.error(err);
+                setError(err.message || 'Error cargando usuarios');
+            }finally{ setLoading(false); }
+        }
+        loadUsers();
     }, []);
 
-    const handleChangeRole = (userId, currentRole) => {
-        const newRole = currentRole === 'coach' ? 'atleta' : 'coach';
+    const handleChangeRole = async (userId, currentRole) => {
+        try{
+            const newRole = currentRole === 'coach' ? 'atleta' : 'coach';
+            const res = await fetch(`${BASE_URL}/api/users/changeRole/${userId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ newRole })
+            });
+            if(!res.ok) throw new Error('No se pudo cambiar el rol');
+            // actualizar lista localmente
+            setUsers(prev => prev.map(u => u._id === userId ? { ...u, role: newRole } : u));
+        }catch(err){
+            console.error(err);
+            setError(err.message || 'Error al cambiar rol');
+        }
+    }
 
-        fetch(`${BASE_URL}/api/users/changeRole/${userId}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ newRole }),
-            credentials: 'include'
-        })
-        .then(res => {
-            if (!res.ok) throw new Error(`Error al cambiar el rol`);
-            return res.json();
-        })
-        .then(data => {
-            setUsers(currentUsers => 
-                currentUsers.map(user => user._id === userId ? data.user : user)
-            );
-        })
-        .catch(err => alert(err.message)); // Puedes usar un sistema de notificaciones más elegante
-    };
 
-    if(loading) return <S.Destacados>Cargando usuarios...</S.Destacados>;
-    if(error) return   <S.Destacados>Error: {error}</S.Destacados>
+
+
 
     // Estilos inline para el modal (overlay)
-    const modalOverlayStyle = {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 1000
-    };
-
-    const modalContentStyle = {
-        backgroundColor: '#fff',
-        padding: '2rem',
-        borderRadius: '8px',
-        maxWidth: '500px',
-        width: '90%',
-        position: 'relative',
-        maxHeight: '90vh',
-        overflowY: 'auto',
-        color: '#333'
-    };
+    // using existing modal styles (.ut-modal-overlay, .ut-modal, .ut-close)
 
     // compute clubs and positions
     const clubs = Array.from(new Set(users.map(u => (u.club || '').trim()).filter(Boolean)));
@@ -99,39 +74,53 @@ function Users(){
         return true;
     });
 
+    if(loading) return (
+        <S.Section>
+            <S.Title>Gestión de Usuarios</S.Title>
+            <div>Cargando usuarios...</div>
+        </S.Section>
+    );
+
+    if(error) return (
+        <S.Section>
+            <S.Title>Gestión de Usuarios</S.Title>
+            <div style={{color: 'var(--danger)'}}>Error: {error}</div>
+        </S.Section>
+    );
+
     return(
         <S.Section>
             <S.Title>Gestión de Usuarios</S.Title>
-            <div style={{display:'flex', gap:8, marginBottom:12, alignItems:'center', flexWrap:'wrap'}}>
-                <div style={{display:'flex', gap:6, alignItems:'center'}}>
-                    <label style={{fontWeight:700, marginRight:6}}>Deporte</label>
-                    <select value={filterSport} onChange={e => { setFilterSport(e.target.value); setFilterPosition(''); }} style={{padding:8, borderRadius:8}}>
+            <S.FilterRow>
+                <S.FilterGroup>
+                    <S.FilterLabel>Deporte</S.FilterLabel>
+                    <S.FilterSelect value={filterSport} onChange={e => { setFilterSport(e.target.value); setFilterPosition(''); }}>
                         <option value="">Todos</option>
                         {Array.from(new Set(users.map(u => u.deporte).filter(Boolean))).map(d => <option key={d} value={d}>{d}</option>)}
-                    </select>
-                </div>
+                    </S.FilterSelect>
+                </S.FilterGroup>
 
-                <div style={{display:'flex', gap:6, alignItems:'center'}}>
-                    <label style={{fontWeight:700, marginRight:6}}>Posición</label>
-                    <select value={filterPosition} onChange={e => setFilterPosition(e.target.value)} style={{padding:8, borderRadius:8}}>
+                <S.FilterGroup>
+                    <S.FilterLabel>Posición</S.FilterLabel>
+                    <S.FilterSelect value={filterPosition} onChange={e => setFilterPosition(e.target.value)}>
                         <option value="">Todos</option>
                         { (availablePositions.length ? availablePositions : Array.from(new Set(users.map(u => u.posicion).filter(Boolean))))
                             .map(p => <option key={p} value={p}>{p}</option>)}
-                    </select>
-                </div>
+                    </S.FilterSelect>
+                </S.FilterGroup>
 
-                <div style={{display:'flex', gap:6, alignItems:'center'}}>
-                    <label style={{fontWeight:700, marginRight:6}}>Club</label>
-                    <select value={filterClub} onChange={e => setFilterClub(e.target.value)} style={{padding:8, borderRadius:8}}>
+                <S.FilterGroup>
+                    <S.FilterLabel>Club</S.FilterLabel>
+                    <S.FilterSelect value={filterClub} onChange={e => setFilterClub(e.target.value)}>
                         <option value="">Todos</option>
                         {clubs.map(c => <option key={c} value={c}>{c}</option>)}
-                    </select>
-                </div>
-                <div style={{marginLeft:'auto'}}>
+                    </S.FilterSelect>
+                </S.FilterGroup>
+                <S.ClearWrapper>
                     <button className="ghost" onClick={() => { setFilterSport(''); setFilterPosition(''); setFilterClub(''); }}>Limpiar filtros</button>
-                </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', width: '100%' }}>
+                </S.ClearWrapper>
+            </S.FilterRow>
+            <S.UserCardsGrid>
                 {filteredUsers.map(user => (
                     <S.UserCard key={user._id}>
                         <S.CardHeader>
@@ -145,10 +134,10 @@ function Users(){
                         <S.UserInfo><strong>Club:</strong> {user.club || 'N/A'}</S.UserInfo>
                         
                         <S.CardActions>
-                            <S.ActionButton onClick={() => setSelectedUser(user)} style={{backgroundColor: '#007bff', marginRight: '5px'}}>
+                            <S.ActionButton onClick={() => setSelectedUser(user)} variant="primary">
                                 Ver Perfil Completo
                             </S.ActionButton>
-                            <S.ActionButton onClick={() => setSelectedTrainingsUser(user)} style={{backgroundColor: '#2f9e44', marginRight: '5px'}}>
+                            <S.ActionButton onClick={() => setSelectedTrainingsUser(user)} variant="success">
                                 Ver entrenamientos
                             </S.ActionButton>
                             <S.ActionButton onClick={() => handleChangeRole(user._id, user.role)}>
@@ -157,47 +146,75 @@ function Users(){
                         </S.CardActions>
                     </S.UserCard>
                 ))}
-            </div>
-
-            {/* Modal de Detalle de Usuario */}
+            </S.UserCardsGrid>
             {selectedUser && (
-                <div style={modalOverlayStyle} onClick={() => setSelectedUser(null)}>
-                    <div style={modalContentStyle} onClick={e => e.stopPropagation()}>
-                        <h2 style={{borderBottom: '1px solid #eee', paddingBottom: '10px'}}>Perfil de Atleta</h2>
-                        <div style={{marginTop: '15px'}}>
-                            <p><strong>Nombre:</strong> {selectedUser.nombre} {selectedUser.apellido}</p>
-                            <p><strong>Email:</strong> {selectedUser.email}</p>
-                            <p><strong>Rol:</strong> {selectedUser.role}</p>
-                            <p><strong>DNI:</strong> {selectedUser.dni}</p>
-                            <hr style={{margin: '10px 0', border: '0', borderTop: '1px solid #eee'}}/>
-                            <p><strong>Deporte:</strong> {selectedUser.deporte}</p>
-                            <p><strong>Posición:</strong> {selectedUser.posicion}</p>
-                            <p><strong>Club:</strong> {selectedUser.club}</p>
-                            <p><strong>División:</strong> {selectedUser.division}</p>
-                            <p><strong>Dominancia:</strong> {selectedUser.dominancia}</p>
-                            <hr style={{margin: '10px 0', border: '0', borderTop: '1px solid #eee'}}/>
-                            <p><strong>Altura:</strong> {selectedUser.altura ? `${selectedUser.altura} cm` : 'No especificada'}</p>
-                            <p><strong>Peso:</strong> {selectedUser.peso ? `${selectedUser.peso} kg` : 'No especificado'}</p>
-                            <p><strong>Fecha Nacimiento:</strong> {selectedUser.nacimiento ? selectedUser.nacimiento.split('T')[0] : (selectedUser.fechaNacimiento ? selectedUser.fechaNacimiento.split('T')[0] : 'No especificada')}</p>
-                            <p><strong>Objetivos:</strong> {selectedUser.objetivosAtleta}</p>
-                            <p><strong>Estado:</strong> {selectedUser.estado}</p>
-                            <hr style={{margin: '10px 0', border: '0', borderTop: '1px solid #eee'}}/>
-                            <p><strong>Lesiones:</strong> {selectedUser.lesiones || 'Ninguna'}</p>
-                            <p><strong>Zonas Sensibles:</strong> {selectedUser.zonasSensibles}</p>
-                            <p><strong>Días Gym:</strong> {selectedUser.diasDisponiblesGimnasio}</p>
-                            <p><strong>Días Deporte:</strong> {selectedUser.diasPracticaDeporte}</p>
-                            <p><strong>Próxima Competencia:</strong> {selectedUser.frecuenciaDeCompetencia ? selectedUser.frecuenciaDeCompetencia.split('T')[0] : 'N/A'}</p>
-                            <hr style={{margin: '10px 0', border: '0', borderTop: '1px solid #eee'}}/>
-                            <p><strong>Registro Salto:</strong> {selectedUser.salto ? selectedUser.salto.split('T')[0] : 'N/A'}</p>
-                            <p><strong>Registro Sprint:</strong> {selectedUser.sprint ? selectedUser.sprint.split('T')[0] : 'N/A'}</p>
-                        </div>
-                        <button onClick={() => setSelectedUser(null)} style={{marginTop: '20px', padding: '10px 20px', cursor: 'pointer', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px'}}>Cerrar</button>
-                    </div>
-                </div>
+                <UM.Overlay onClick={() => setSelectedUser(null)}>
+                    <UM.Modal onClick={e => e.stopPropagation()}>
+                        <UM.Close onClick={() => setSelectedUser(null)}>×</UM.Close>
+                        <UM.Header>
+                            <UM.AvatarBox>
+                                <UM.Avatar>{selectedUser.nombre ? selectedUser.nombre.charAt(0) : 'U'}{selectedUser.apellido ? selectedUser.apellido.charAt(0) : ''}</UM.Avatar>
+                                <UM.Club>{selectedUser.club}</UM.Club>
+                                <UM.Club>{selectedUser.deporte} · {selectedUser.posicion || '—'}</UM.Club>
+                            </UM.AvatarBox>
+
+                            <UM.MainInfo>
+                                <UM.TitleRow>
+                                    <div>
+                                        <UM.Title>{selectedUser.nombre} {selectedUser.apellido}</UM.Title>
+                                        <UM.Email>{selectedUser.email}</UM.Email>
+                                    </div>
+                                    <div>
+                                        <UM.RoleBadge>{selectedUser.role}</UM.RoleBadge>
+                                    </div>
+                                </UM.TitleRow>
+
+                                <UM.Grid>
+                                    <UM.Card>
+                                        <UM.Field>DNI</UM.Field>
+                                        <UM.Value>{selectedUser.dni || '—'}</UM.Value>
+                                    </UM.Card>
+                                    <UM.Card>
+                                        <UM.Field>División</UM.Field>
+                                        <UM.Value>{selectedUser.division || '—'}</UM.Value>
+                                    </UM.Card>
+                                    <UM.Card>
+                                        <UM.Field>Altura</UM.Field>
+                                        <UM.Value>{selectedUser.altura ? `${selectedUser.altura} cm` : '—'}</UM.Value>
+                                    </UM.Card>
+                                    <UM.Card>
+                                        <UM.Field>Peso</UM.Field>
+                                        <UM.Value>{selectedUser.peso ? `${selectedUser.peso} kg` : '—'}</UM.Value>
+                                    </UM.Card>
+                                    <UM.Card>
+                                        <UM.Field>Dominancia</UM.Field>
+                                        <UM.Value>{selectedUser.dominancia || '—'}</UM.Value>
+                                    </UM.Card>
+                                    <UM.Card>
+                                        <UM.Field>Fecha Nac.</UM.Field>
+                                        <UM.Value>{selectedUser.nacimiento ? (selectedUser.nacimiento.split ? selectedUser.nacimiento.split('T')[0] : new Date(selectedUser.nacimiento).toISOString().split('T')[0]) : (selectedUser.fechaNacimiento ? selectedUser.fechaNacimiento.split('T')[0] : '—')}</UM.Value>
+                                    </UM.Card>
+                                </UM.Grid>
+
+                                <UM.DetailsGrid>
+                                    <UM.DetailsItem><strong>Objetivos:</strong> {selectedUser.objetivosAtleta || '—'}</UM.DetailsItem>
+                                    <UM.DetailsItem><strong>Estado:</strong> {selectedUser.estado || '—'}</UM.DetailsItem>
+                                    <UM.DetailsItem><strong>Lesiones:</strong> {selectedUser.lesiones || 'Ninguna'}</UM.DetailsItem>
+                                    <UM.DetailsItem><strong>Zonas sensibles:</strong> {selectedUser.zonasSensibles || '—'}</UM.DetailsItem>
+                                    <UM.DetailsItem><strong>Días gym:</strong> {selectedUser.diasDisponiblesGimnasio || '—'}</UM.DetailsItem>
+                                    <UM.DetailsItem><strong>Días deporte:</strong> {selectedUser.diasPracticaDeporte || '—'}</UM.DetailsItem>
+                                    <UM.DetailsItem><strong>Próx. competencia:</strong> {selectedUser.frecuenciaDeCompetencia ? (selectedUser.frecuenciaDeCompetencia.split ? selectedUser.frecuenciaDeCompetencia.split('T')[0] : new Date(selectedUser.frecuenciaDeCompetencia).toISOString().split('T')[0]) : '—'}</UM.DetailsItem>
+                                    <UM.DetailsItem><strong>Salto (registro):</strong> {selectedUser.salto ? (selectedUser.salto.split ? selectedUser.salto.split('T')[0] : new Date(selectedUser.salto).toISOString().split('T')[0]) : '—'}</UM.DetailsItem>
+                                    <UM.DetailsItem><strong>Sprint (registro):</strong> {selectedUser.sprint ? (selectedUser.sprint.split ? selectedUser.sprint.split('T')[0] : new Date(selectedUser.sprint).toISOString().split('T')[0]) : '—'}</UM.DetailsItem>
+                                </UM.DetailsGrid>
+                            </UM.MainInfo>
+                        </UM.Header>
+                    </UM.Modal>
+                </UM.Overlay>
             )}
             {/* Modal con entrenamientos del atleta (para coaches) */}
             {selectedTrainingsUser && (
-                <CoachUserTrainings userId={selectedTrainingsUser._id} onClose={() => setSelectedTrainingsUser(null)} />
+                <CoachUserTrainings userId={selectedTrainingsUser._id} user={selectedTrainingsUser} onClose={() => setSelectedTrainingsUser(null)} />
             )}
         </S.Section>
     )

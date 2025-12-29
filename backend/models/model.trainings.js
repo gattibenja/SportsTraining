@@ -12,9 +12,9 @@ const trainingSchema = new mongoose.Schema({
         required: true,
         default: Date.now
     },
-    tipoEntrenamiento: {
+    tipoSesion: {
         type: String,
-        enum: ['Físico', 'Técnico', 'Táctico', 'Recuperación'],
+        enum: ['gimnasio','cancha','campo','partido','recuperacion'],
         required: true
     },
     duracion: { // en minutos
@@ -27,28 +27,57 @@ const trainingSchema = new mongoose.Schema({
         max: 10,
         required: true
     },
-    fatiga: { // Fatiga al finalizar 1-10
+    casstAu: { // Duracion x RPE
+        type: Number,
+        required: true
+    },
+    trabajoPrincipal: {
+        type: String,
+        enum: ['técnica','resistencia','fuerza','potencia','movilidad/flexibilidad'],
+    },
+    suenoHoras: {
         type: Number,
         min: 1,
-        max: 10,
-        required: true
+        max: 12
     },
-    dolor: {
+    suenoCalidad: {
+        type: Number,
+        min: 1,
+        max: 5
+    },
+    dolorMuscular: {
+        type: Number,
+        min: 1,
+        max: 5
+    },
+    estres: {
+        type: Number,
+        min: 1,
+        max: 5
+    },
+    animo: {
+        type: Number,
+        min: 1,
+        max: 5
+    },
+    motivacion: {
+        type: Number,
+        min: 1,
+        max: 5
+    },
+    calidadAlimentacion: {
+        type: Number,
+        min: 1,
+        max: 5
+    },
+    hidratacion: {
+        type: Number,
+        min: 1,
+        max: 5
+    },
+    cumplimientoObjetivo: {
         type: Boolean,
         default: false
-    },
-    zonaDolor: {
-        type: String
-    },
-    calidadDescanso: {
-        type: String,
-        enum: ['Mala', 'Normal', 'Buena'],
-        required: true
-    },
-    estadoAnimo: {
-        type: String,
-        enum: ['Bajo', 'Normal', 'Alto'],
-        required: true
     },
     notas: {
         type: String

@@ -9,6 +9,7 @@ import About from './pages/about/About.jsx';
 import './App.css';
 import Dashboard from './pages/dashboard/Dashboard.jsx';
 import RegisterTrainings from './pages/registerTrainings/RegisterTrainings.jsx';
+import AthleteDashboardPage from './pages/athleteDashboard/AthleteDashboardPage.jsx';
 function App() {
     return (
         <>
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/user/signup" element={<Usersignup />} />
                 <Route path="/admin/users" element={<UserManagement />} />
                 <Route path="/athlete/profile" element={<AthleteProfile />} />
+                <Route path="/athlete/dashboard" element={<AthleteDashboardPage />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/admin/dashboard" element={<Dashboard />} />
                 <Route path="/athlete/trainings" element={<RegisterTrainings />} />

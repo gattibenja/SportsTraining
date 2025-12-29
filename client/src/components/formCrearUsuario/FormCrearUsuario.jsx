@@ -100,7 +100,7 @@ export default function FormCrearUsuarios({ onRegistrationSuccess }) {
             <S.Container>
                 <S.Form onSubmit={formik.handleSubmit}>
                     {/* Email y Contraseña */}
-                    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px'}}>
+                    <S.GridTwo>
                         <div>
                             <S.Label>Email</S.Label>
                             <S.Input 
@@ -111,7 +111,7 @@ export default function FormCrearUsuarios({ onRegistrationSuccess }) {
                                 onChange={formik.handleChange} 
                                 onBlur={formik.handleBlur} 
                             />
-                            {formik.touched.email && formik.errors.email && <div style={{ color: "var(--danger)", fontSize: "12px", marginTop: "4px" }}>{formik.errors.email}</div>}
+                            {formik.touched.email && formik.errors.email && <S.ErrorBox>{formik.errors.email}</S.ErrorBox>}
                         </div>
 
                         <div>
@@ -124,12 +124,12 @@ export default function FormCrearUsuarios({ onRegistrationSuccess }) {
                                 onChange={formik.handleChange} 
                                 onBlur={formik.handleBlur} 
                             />
-                            {formik.touched.password && formik.errors.password && <div style={{ color: "var(--danger)", fontSize: "12px", marginTop: "4px" }}>{formik.errors.password}</div>}
+                            {formik.touched.password && formik.errors.password && <S.ErrorBox>{formik.errors.password}</S.ErrorBox>}
                         </div>
-                    </div>
+                    </S.GridTwo>
 
                     {/* Nombre, Apellido y Rol */}
-                    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px'}}>
+                    <S.GridThree>
                         <div>
                             <S.Label>Nombre</S.Label>
                             <S.Input 
@@ -140,7 +140,7 @@ export default function FormCrearUsuarios({ onRegistrationSuccess }) {
                                 onChange={formik.handleChange} 
                                 onBlur={formik.handleBlur} 
                             />
-                            {formik.touched.nombre && formik.errors.nombre && <div style={{ color: "var(--danger)", fontSize: "12px", marginTop: "4px" }}>{formik.errors.nombre}</div>}
+                            {formik.touched.nombre && formik.errors.nombre && <S.ErrorBox>{formik.errors.nombre}</S.ErrorBox>}
                         </div>
 
                         <div>
@@ -153,38 +153,26 @@ export default function FormCrearUsuarios({ onRegistrationSuccess }) {
                                 onChange={formik.handleChange} 
                                 onBlur={formik.handleBlur} 
                             />
-                            {formik.touched.apellido && formik.errors.apellido && <div style={{ color: "var(--danger)", fontSize: "12px", marginTop: "4px" }}>{formik.errors.apellido}</div>}
+                            {formik.touched.apellido && formik.errors.apellido && <S.ErrorBox>{formik.errors.apellido}</S.ErrorBox>}
                         </div>
 
                         <div>
                             <S.Label>Rol</S.Label>
-                            <select 
-                                name="role" 
-                                value={formik.values.role} 
-                                onChange={formik.handleChange} 
+                            <S.Select
+                                name="role"
+                                value={formik.values.role}
+                                onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                style={{
-                                    padding: '10px 12px',
-                                    border: '1px solid var(--border)',
-                                    borderRadius: '12px',
-                                    fontSize: '1rem',
-                                    fontFamily: 'inherit',
-                                    background: 'rgba(0, 0, 0, 0.25)',
-                                    color: 'var(--txt)',
-                                    width: '100%',
-                                    boxSizing: 'border-box',
-                                    cursor: 'pointer'
-                                }}
                             >
                                 <option value="atleta">Atleta</option>
                                 <option value="coach">Coach</option>
-                            </select>
-                            {formik.touched.role && formik.errors.role && <div style={{ color: "var(--danger)", fontSize: "12px", marginTop: "4px" }}>{formik.errors.role}</div>}
+                            </S.Select>
+                            {formik.touched.role && formik.errors.role && <S.ErrorBox>{formik.errors.role}</S.ErrorBox>}
                         </div>
-                    </div>
+                    </S.GridThree>
 
                     {/* DNI */}
-                    <div style={{marginTop: 12}}>
+                    <S.Spacer>
                         <S.Label>DNI</S.Label>
                         <S.Input
                             type="text"
@@ -194,12 +182,12 @@ export default function FormCrearUsuarios({ onRegistrationSuccess }) {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
-                        {formik.touched.dni && formik.errors.dni && <div style={{ color: "var(--danger)", fontSize: "12px", marginTop: "4px" }}>{formik.errors.dni}</div>}
-                    </div>
+                        {formik.touched.dni && formik.errors.dni && <S.ErrorBox>{formik.errors.dni}</S.ErrorBox>}
+                    </S.Spacer>
 
                     {/* Secret Password for Coach */}
                     {formik.values.role === 'coach' && (
-                        <div style={{marginTop: 12}}>
+                        <S.Spacer>
                             <S.Label>Clave de Administrador</S.Label>
                             <S.Input
                                 type="password"
@@ -209,31 +197,19 @@ export default function FormCrearUsuarios({ onRegistrationSuccess }) {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                             />
-                            {formik.touched.secretPassword && formik.errors.secretPassword && <div style={{ color: "var(--danger)", fontSize: "12px", marginTop: "4px" }}>{formik.errors.secretPassword}</div>}
-                        </div>
+                            {formik.touched.secretPassword && formik.errors.secretPassword && <S.ErrorBox>{formik.errors.secretPassword}</S.ErrorBox>}
+                        </S.Spacer>
                     )}
 
                     {/* Deporte, Posición y Club */}
-                    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px'}}>
+                    <S.GridThree>
                         <div>
                             <S.Label>Deporte</S.Label>
-                            <select 
-                                name="deporte" 
-                                value={formik.values.deporte} 
-                                onChange={formik.handleChange} 
+                            <S.Select
+                                name="deporte"
+                                value={formik.values.deporte}
+                                onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                style={{
-                                    padding: '10px 12px',
-                                    border: '1px solid var(--border)',
-                                    borderRadius: '12px',
-                                    fontSize: '1rem',
-                                    fontFamily: 'inherit',
-                                    background: 'rgba(0, 0, 0, 0.25)',
-                                    color: 'var(--txt)',
-                                    width: '100%',
-                                    boxSizing: 'border-box',
-                                    cursor: 'pointer'
-                                }}
                             >
                                 <option value="Tenis">Tenis</option>
                                 <option value="Rugby">Rugby</option>
@@ -241,29 +217,17 @@ export default function FormCrearUsuarios({ onRegistrationSuccess }) {
                                 <option value="Vóley">Vóley</option>
                                 <option value="Básquet">Básquet</option>
                                 <option value="Handball">Handball</option>
-                            </select>
-                            {formik.touched.deporte && formik.errors.deporte && <div style={{ color: "var(--danger)", fontSize: "12px", marginTop: "4px" }}>{formik.errors.deporte}</div>}
+                            </S.Select>
+                            {formik.touched.deporte && formik.errors.deporte && <S.ErrorBox>{formik.errors.deporte}</S.ErrorBox>}
                         </div>
 
                             <div>
                                 <S.Label>Posición / Rol</S.Label>
-                                <select
+                                <S.Select
                                     name="posicion"
                                     value={formik.values.posicion}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
-                                    style={{
-                                        padding: '10px 12px',
-                                        border: '1px solid var(--border)',
-                                        borderRadius: '12px',
-                                        fontSize: '1rem',
-                                        fontFamily: 'inherit',
-                                        background: 'rgba(0, 0, 0, 0.25)',
-                                        color: 'var(--txt)',
-                                        width: '100%',
-                                        boxSizing: 'border-box',
-                                        cursor: 'pointer'
-                                    }}
                                 >
                                     <option value="">Seleccionar posición...</option>
                                     {getPositionsForSport(formik.values.deporte).length === 0 ? (
@@ -273,8 +237,8 @@ export default function FormCrearUsuarios({ onRegistrationSuccess }) {
                                             <option key={pos} value={pos}>{pos}</option>
                                         ))
                                     )}
-                                </select>
-                                {formik.touched.posicion && formik.errors.posicion && <div style={{ color: "var(--danger)", fontSize: "12px", marginTop: "4px" }}>{formik.errors.posicion}</div>}
+                                </S.Select>
+                                    {formik.touched.posicion && formik.errors.posicion && <S.ErrorBox>{formik.errors.posicion}</S.ErrorBox>}
                             </div>
 
                         <div>
@@ -287,13 +251,13 @@ export default function FormCrearUsuarios({ onRegistrationSuccess }) {
                                 onChange={formik.handleChange} 
                                 onBlur={formik.handleBlur} 
                             />
-                            {formik.touched.club && formik.errors.club && <div style={{ color: "var(--danger)", fontSize: "12px", marginTop: "4px" }}>{formik.errors.club}</div>}
+                            {formik.touched.club && formik.errors.club && <S.ErrorBox>{formik.errors.club}</S.ErrorBox>}
                         </div>
-                    </div>
+                    </S.GridThree>
 
                     {/* Mensajes de error y éxito */}
-                    {error && <div style={{ color: "var(--danger)", fontSize: "14px", marginTop: "12px", padding: "10px 12px", background: "rgba(255, 77, 94, 0.08)", border: "1px solid rgba(255, 77, 94, 0.3)", borderRadius: "8px" }}>{error}</div>}
-                    {exito && <div style={{ color: "var(--ok)", fontSize: "14px", marginTop: "12px", padding: "10px 12px", background: "rgba(77, 255, 181, 0.08)", border: "1px solid rgba(77, 255, 181, 0.3)", borderRadius: "8px" }}>¡Tu cuenta se registró exitosamente!</div>}
+                    {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
+                    {exito && <S.SuccessMessage>¡Tu cuenta se registró exitosamente!</S.SuccessMessage>}
                     
                     <S.Boton type="submit" disabled={formik.isSubmitting}>
                         {formik.isSubmitting ? 'Creando...' : 'Crear Cuenta'}

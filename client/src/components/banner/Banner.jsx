@@ -37,10 +37,10 @@ function Banner(){
               <S.Title>Potencia tu Rendimiento</S.Title>
               <S.SubTitle>Lo que no se registra, no se puede mejorar.</S.SubTitle>
               {user ? (
-                <div style={{display: 'flex', gap: 12, alignItems: 'center'}}>
+                <S.ButtonsRow>
                   <S.Boton to={primaryLink}>{primaryLabel}</S.Boton>
                   {secondaryLink ? <S.BotonSecondary to={secondaryLink}>{secondaryLabel}</S.BotonSecondary> : null}
-                </div>
+                </S.ButtonsRow>
               ) : (
                 <S.Boton to="/user/login">Registrate</S.Boton>
               )}

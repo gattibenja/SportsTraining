@@ -96,3 +96,15 @@ export const Boton = styled.button`
         opacity: 0.5;
     }
 `;
+
+export const ErrorMessage = styled.div`
+    color: #ff6b6b;
+    font-size: 13px;
+    margin-top: 4px;
+`;
+
+export const SuccessMessage = styled.div`
+    color: #4cd964;
+    font-size: 13px;
+    margin-top: 4px;
+`;

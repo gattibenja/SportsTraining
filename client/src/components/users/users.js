@@ -34,6 +34,50 @@ export const Grid = styled.div`
     gap: 14px;
 `;
 
+export const UserCardsGrid = styled.div`
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    width: 100%;
+`;
+
+export const FilterRow = styled.div`
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+`;
+
+export const FilterGroup = styled.div`
+    display: flex;
+    gap: 6px;
+    align-items: center;
+`;
+
+export const FilterLabel = styled.label`
+    font-weight: 700;
+    margin-right: 6px;
+`;
+
+export const FilterSelect = styled.select`
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--txt);
+`;
+
+export const ClearWrapper = styled.div`
+    margin-left: auto;
+`;
+
+export const ErrorMessage = styled.div`
+    color: var(--danger);
+    font-size: 14px;
+    margin-top: 8px;
+`;
+
 export const UserCard = styled.div`
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0));
     border: 1px solid var(--border);
@@ -95,8 +139,8 @@ export const CardActions = styled.div`
 `;
 
 export const ActionButton = styled.button`
-    background: rgba(74, 163, 255, 0.18);
-    border: 1px solid rgba(74, 163, 255, 0.35);
+    background: ${props => props.variant === 'success' ? 'rgba(47,158,68,0.12)' : props.variant === 'primary' ? 'rgba(0,123,255,0.12)' : 'rgba(74, 163, 255, 0.18)'};
+    border: 1px solid ${props => props.variant === 'success' ? 'rgba(47,158,68,0.25)' : props.variant === 'primary' ? 'rgba(0,123,255,0.35)' : 'rgba(74, 163, 255, 0.35)'};
     color: var(--txt);
     border-radius: 8px;
     padding: 6px 12px;

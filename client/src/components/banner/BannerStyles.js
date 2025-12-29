@@ -212,3 +212,13 @@ export const BotonSecondary = styled(NavLink)`
     padding: 9px 16px;
   }
 `;
+
+export const ButtonsRow = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
+`;

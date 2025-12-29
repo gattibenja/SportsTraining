@@ -6,6 +6,14 @@ exports.createRegister = async (req, res, next) => {
         const userId = req.user.id;
         const trainingData = req.body;
 
+        // Ensure fecha is date and calculate casstAu if not provided
+        if(trainingData.fecha){
+            trainingData.fecha = new Date(trainingData.fecha);
+        }
+        if(!trainingData.casstAu && trainingData.duracion && trainingData.rpe){
+            trainingData.casstAu = Number(trainingData.duracion) * Number(trainingData.rpe);
+        }
+
         const newTraining = new Training({
             ...trainingData,
             user: userId

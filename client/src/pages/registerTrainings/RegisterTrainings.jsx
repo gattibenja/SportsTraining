@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import UserTrainings from '../../components/userTrainings/UserTrainings.jsx';
 import { useToast } from '../../auth/ToastContext';
+import S from './RegisterTrainings.styles';
 
 const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
@@ -13,14 +14,19 @@ function RegisterTrainings(){
 
     const [form, setForm] = useState({
         fecha: '',
-        tipoEntrenamiento: 'Físico',
+        tipoSesion: 'gimnasio',
         duracion: 60,
         rpe: 5,
-        fatiga: 5,
-        dolor: false,
-        zonaDolor: '',
-        calidadDescanso: 'Normal',
-        estadoAnimo: 'Normal',
+        trabajoPrincipal: 'técnica',
+        suenoHoras: 8,
+        suenoCalidad: 4,
+        dolorMuscular: 1,
+        estres: 2,
+        animo: 3,
+        motivacion: 3,
+        calidadAlimentacion: 3,
+        hidratacion: 3,
+        cumplimientoObjetivo: false,
         notas: ''
     });
 
@@ -33,7 +39,17 @@ function RegisterTrainings(){
         e.preventDefault();
         try{
             const payload = { ...form };
+            // normalize date
             if(payload.fecha){ payload.fecha = new Date(payload.fecha).toISOString(); }
+            // coerce numeric fields to numbers
+            const numericFields = ['duracion','rpe','suenoHoras','suenoCalidad','dolorMuscular','estres','animo','motivacion','calidadAlimentacion','hidratacion'];
+            numericFields.forEach(f => { if(payload[f] !== undefined && payload[f] !== null) payload[f] = Number(payload[f]); });
+            // ensure boolean
+            payload.cumplimientoObjetivo = !!payload.cumplimientoObjetivo;
+            // compute casstAu client-side if missing
+            if(!payload.casstAu && payload.duracion && payload.rpe){ payload.casstAu = payload.duracion * payload.rpe; }
+
+            console.debug('Sending training payload', payload);
 
             const res = await fetch(`${BASE_URL}/api/trainings/create`, {
                 method: 'POST',
@@ -41,98 +57,118 @@ function RegisterTrainings(){
                 credentials: 'include',
                 body: JSON.stringify(payload)
             });
-            if(!res.ok) throw new Error('Error creando registro');
+            const resBody = await res.json().catch(() => null);
+            if(!res.ok){
+                console.error('Create training failed', res.status, resBody);
+                throw new Error((resBody && (resBody.error?.message || resBody.message)) || 'Error creando registro');
+            }
             addToast('Registro añadido correctamente', 'success');
             setShowCreate(false);
             setForm({
-                fecha: '', tipoEntrenamiento: 'Físico', duracion:60, rpe:5, fatiga:5, dolor:false, zonaDolor:'', calidadDescanso:'Normal', estadoAnimo:'Normal', notas:''
+                fecha: '', tipoSesion: 'gimnasio', duracion: 60, rpe:5, trabajoPrincipal: 'técnica', suenoHoras:8, suenoCalidad:4, dolorMuscular:1, estres:2, animo:3, motivacion:3, calidadAlimentacion:3, hidratacion:3, cumplimientoObjetivo:false, notas: ''
             });
             setRefreshToggle(t => !t);
         }catch(err){
             console.error(err);
-            addToast('Error al crear registro', 'error');
+            addToast(err.message || 'Error al crear registro', 'error');
         }
     }
 
     return(
         <>
 
-            <main className="container" style={{paddingTop:20}}>
-                <div className="page-header" style={{marginBottom:16}}>
+            <S.Main className="container">
+                <S.PageHeader>
                     <h2>Mis entrenamientos</h2>
-                    <button className="primary create-btn" onClick={() => setShowCreate(true)}>Crear registro</button>
-                </div>
+                    <button className="primary create-btn" style= {{margin: 20}} onClick={() => setShowCreate(true)}>Crear registro</button>
+                </S.PageHeader>
 
                 <UserTrainings refresh={refreshToggle} />
-            </main>
+            </S.Main>
 
             {showCreate && (
-                <div className="modal-overlay" onClick={() => setShowCreate(false)}>
-                    <div className="modal" onClick={(e) => e.stopPropagation()} style={{maxWidth:700}}>
-                        <button className="modal-close" onClick={() => setShowCreate(false)}>×</button>
+                <S.ModalOverlay onClick={() => setShowCreate(false)}>
+                    <S.Modal onClick={(e) => e.stopPropagation()}>
+                        <S.Close className="modal-close" onClick={() => setShowCreate(false)}>×</S.Close>
                         <h3>Nuevo registro de entrenamiento</h3>
-                        <form onSubmit={handleSubmit} style={{display:'grid', gap:10}}>
-                            <label>Fecha y hora
+                        <S.FormGrid onSubmit={handleSubmit}>
+                            <S.FieldLabel>Fecha y hora
                                 <input name="fecha" type="datetime-local" value={form.fecha} onChange={handleChange} />
-                            </label>
+                            </S.FieldLabel>
 
-                            <label>Tipo de entrenamiento
-                                <select name="tipoEntrenamiento" value={form.tipoEntrenamiento} onChange={handleChange}>
-                                    <option>Físico</option>
-                                    <option>Técnico</option>
-                                    <option>Táctico</option>
-                                    <option>Recuperación</option>
+                            <S.FieldLabel>Tipo de sesión
+                                <select name="tipoSesion" value={form.tipoSesion} onChange={handleChange}>
+                                    <option value="gimnasio">gimnasio</option>
+                                    <option value="cancha">cancha</option>
+                                    <option value="campo">campo</option>
+                                    <option value="partido">partido</option>
+                                    <option value="recuperacion">recuperacion</option>
                                 </select>
-                            </label>
+                            </S.FieldLabel>
 
-                            <label>Duración (min)
+                            <S.FieldLabel>Duración (min)
                                 <input name="duracion" type="number" min="1" value={form.duracion} onChange={handleChange} />
-                            </label>
+                            </S.FieldLabel>
 
-                            <div style={{display:'flex', gap:8}}>
-                                <label style={{flex:1}}>RPE
+                            <S.Row>
+                                <S.FieldLabel flex={1}>RPE
                                     <input name="rpe" type="number" min="1" max="10" value={form.rpe} onChange={handleChange} />
-                                </label>
-                                <label style={{flex:1}}>Fatiga
-                                    <input name="fatiga" type="number" min="1" max="10" value={form.fatiga} onChange={handleChange} />
-                                </label>
-                            </div>
+                                </S.FieldLabel>
+                                <S.FieldLabel flex={1}>Trabajo principal
+                                    <select name="trabajoPrincipal" value={form.trabajoPrincipal} onChange={handleChange}>
+                                        <option value="técnica">técnica</option>
+                                        <option value="resistencia">resistencia</option>
+                                        <option value="fuerza">fuerza</option>
+                                        <option value="potencia">potencia</option>
+                                        <option value="movilidad/flexibilidad">movilidad/flexibilidad</option>
+                                    </select>
+                                </S.FieldLabel>
+                            </S.Row>
 
-                            <label style={{display:'flex', alignItems:'center', gap:8}}>
-                                <input name="dolor" type="checkbox" checked={form.dolor} onChange={handleChange} /> Dolor
-                            </label>
+                            {/* checkbox removed — use 'Dolor muscular (1-5)' numeric field below */}
 
-                            <label>Zona de dolor
-                                <input name="zonaDolor" value={form.zonaDolor} onChange={handleChange} />
-                            </label>
+                            <S.TwoColGrid>
+                                <S.FieldLabel>Horas de sueño
+                                    <input name="suenoHoras" type="number" min="1" max="12" value={form.suenoHoras} onChange={handleChange} />
+                                </S.FieldLabel>
+                                <S.FieldLabel>Calidad sueño (1-5)
+                                    <input name="suenoCalidad" type="number" min="1" max="5" value={form.suenoCalidad} onChange={handleChange} />
+                                </S.FieldLabel>
+                                <S.FieldLabel>Dolor muscular (1-5)
+                                    <input name="dolorMuscular" type="number" min="1" max="5" value={form.dolorMuscular} onChange={handleChange} />
+                                </S.FieldLabel>
+                                <S.FieldLabel>Estrés (1-5)
+                                    <input name="estres" type="number" min="1" max="5" value={form.estres} onChange={handleChange} />
+                                </S.FieldLabel>
+                                <S.FieldLabel>Ánimo (1-5)
+                                    <input name="animo" type="number" min="1" max="5" value={form.animo} onChange={handleChange} />
+                                </S.FieldLabel>
+                                <S.FieldLabel>Motivación (1-5)
+                                    <input name="motivacion" type="number" min="1" max="5" value={form.motivacion} onChange={handleChange} />
+                                </S.FieldLabel>
+                                <S.FieldLabel>Calidad alimentación (1-5)
+                                    <input name="calidadAlimentacion" type="number" min="1" max="5" value={form.calidadAlimentacion} onChange={handleChange} />
+                                </S.FieldLabel>
+                                <S.FieldLabel>Hidratación (1-5)
+                                    <input name="hidratacion" type="number" min="1" max="5" value={form.hidratacion} onChange={handleChange} />
+                                </S.FieldLabel>
+                            </S.TwoColGrid>
 
-                            <label>Calidad de descanso
-                                <select name="calidadDescanso" value={form.calidadDescanso} onChange={handleChange}>
-                                    <option>Mala</option>
-                                    <option>Normal</option>
-                                    <option>Buena</option>
-                                </select>
-                            </label>
+                            <S.FieldLabel row center gap={8}>
+                                <input name="cumplimientoObjetivo" type="checkbox" checked={form.cumplimientoObjetivo} onChange={handleChange} /> Cumplí el objetivo de entrenamiento
+                            </S.FieldLabel>
 
-                            <label>Estado de ánimo
-                                <select name="estadoAnimo" value={form.estadoAnimo} onChange={handleChange}>
-                                    <option>Bajo</option>
-                                    <option>Normal</option>
-                                    <option>Alto</option>
-                                </select>
-                            </label>
-
-                            <label>Notas
+                            <S.FieldLabel>Notas
                                 <textarea name="notas" value={form.notas} onChange={handleChange} />
-                            </label>
+                            </S.FieldLabel>
 
-                            <div style={{display:'flex', gap:8, justifyContent:'flex-end'}}>
+                            <S.Actions>
                                 <button type="button" className="ghost" onClick={() => setShowCreate(false)}>Cancelar</button>
                                 <button type="submit" className="primary">Guardar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                            </S.Actions>
+                        </S.FormGrid>
+                    </S.Modal>
+                </S.ModalOverlay>
             )}
         </>
     )

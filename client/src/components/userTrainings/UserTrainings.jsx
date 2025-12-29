@@ -37,12 +37,13 @@ export default function UserTrainings({ refresh }){
                     <div key={t._id} className="ut-card" onClick={() => setSelected(t)}>
                         <div className="ut-card-head">
                             <div className="ut-date">{t.fecha ? format(new Date(t.fecha), 'dd/MM/yyyy') : ''}</div>
-                            <div className="ut-type">{t.tipoEntrenamiento}</div>
+                            <div className="ut-type">{t.tipoSesion || t.tipoEntrenamiento}</div>
                         </div>
                         <div className="ut-body">
                             <div>Duración: <strong>{t.duracion} min</strong></div>
                             <div>RPE: <strong>{t.rpe}</strong></div>
-                            <div>Fatiga: <strong>{t.fatiga}</strong></div>
+                            <div>CASST AU: <strong>{t.casstAu}</strong></div>
+                            <div>Trabajo: <strong>{t.trabajoPrincipal}</strong></div>
                         </div>
                     </div>
                 ))}
@@ -54,14 +55,19 @@ export default function UserTrainings({ refresh }){
                         <button className="ut-close" onClick={() => setSelected(null)}>×</button>
                         <h3>Detalle entrenamiento</h3>
                         <div className="ut-detail-row"><strong>Fecha:</strong> {selected.fecha ? format(new Date(selected.fecha), 'dd/MM/yyyy HH:mm') : ''}</div>
-                        <div className="ut-detail-row"><strong>Tipo:</strong> {selected.tipoEntrenamiento}</div>
+                        <div className="ut-detail-row"><strong>Tipo:</strong> {selected.tipoSesion || selected.tipoEntrenamiento}</div>
                         <div className="ut-detail-row"><strong>Duración:</strong> {selected.duracion} min</div>
                         <div className="ut-detail-row"><strong>RPE:</strong> {selected.rpe}</div>
-                        <div className="ut-detail-row"><strong>Fatiga:</strong> {selected.fatiga}</div>
-                        <div className="ut-detail-row"><strong>Dolor:</strong> {selected.dolor ? 'Sí' : 'No'}</div>
-                        {selected.zonaDolor && <div className="ut-detail-row"><strong>Zona de dolor:</strong> {selected.zonaDolor}</div>}
-                        <div className="ut-detail-row"><strong>Calidad descanso:</strong> {selected.calidadDescanso}</div>
-                        <div className="ut-detail-row"><strong>Estado ánimo:</strong> {selected.estadoAnimo}</div>
+                        <div className="ut-detail-row"><strong>CASST AU:</strong> {selected.casstAu}</div>
+                        <div className="ut-detail-row"><strong>Trabajo principal:</strong> {selected.trabajoPrincipal}</div>
+                        <div className="ut-detail-row"><strong>Sueño:</strong> {selected.suenoHoras} h (calidad {selected.suenoCalidad}/5)</div>
+                        <div className="ut-detail-row"><strong>Dolor muscular:</strong> {selected.dolorMuscular || 'N/A'}</div>
+                        <div className="ut-detail-row"><strong>Estrés:</strong> {selected.estres || 'N/A'}</div>
+                        <div className="ut-detail-row"><strong>Ánimo:</strong> {selected.animo || 'N/A'}</div>
+                        <div className="ut-detail-row"><strong>Motivación:</strong> {selected.motivacion || 'N/A'}</div>
+                        <div className="ut-detail-row"><strong>Alimentación:</strong> {selected.calidadAlimentacion || 'N/A'}</div>
+                        <div className="ut-detail-row"><strong>Hidratación:</strong> {selected.hidratacion || 'N/A'}</div>
+                        <div className="ut-detail-row"><strong>Cumplimiento objetivo:</strong> {selected.cumplimientoObjetivo ? 'Sí' : 'No'}</div>
                         {selected.notas && <div className="ut-detail-row"><strong>Notas:</strong> {selected.notas}</div>}
                     </div>
                 </div>

@@ -5,6 +5,7 @@
 //const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
 import Banner from "../../components/banner/Banner";
 import React, { useEffect, useState } from 'react';
+import * as S from './Dashboard.styles.js'
 const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
 function Dashboard(){
@@ -102,15 +103,18 @@ function Dashboard(){
         
                         <div className="bar-chart">
                             <h3 className="section-title">Entrenamientos por deporte</h3>
-                            {sportEntries.map(([sport, count]) => (
-                                <div className="bar-row" key={sport}>
-                                    <span className="bar-name">{sport}</span>
-                                    <div className="bar-track">
-                                        <div className="bar-fill" style={{width: `${Math.round((count / chartMax) * 100)}%`}}></div>
-                                    </div>
-                                    <span className="bar-val">{count}</span>
-                                </div>
-                            ))}
+                            {sportEntries.map(([sport, count]) => {
+                                const percent = Math.round((count / chartMax) * 100);
+                                return (
+                                    <S.BarRow key={sport}>
+                                        <S.BarName>{sport}</S.BarName>
+                                        <S.BarTrack>
+                                            <S.BarFill percent={percent} />
+                                        </S.BarTrack>
+                                        <S.BarVal>{count}</S.BarVal>
+                                    </S.BarRow>
+                                )
+                            })}
                         </div>
                     </section>
         

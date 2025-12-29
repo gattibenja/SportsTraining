@@ -58,14 +58,14 @@ export default function FormLoginUsuario() {
                 
                 <S.Label>E-mail</S.Label>
                 <S.Input type="email" name="email" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                {formik.touched.email && formik.errors.email ? <div style={{ color: "red" }}>{formik.errors.email}</div> : null}
+                {formik.touched.email && formik.errors.email ? <S.ErrorMessage>{formik.errors.email}</S.ErrorMessage> : null}
     
                 <S.Label>Contraseña</S.Label>
                 <S.Input type="password" name="password" value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                {formik.touched.password && formik.errors.password ? <div style={{ color: "red" }}>{formik.errors.password}</div> : null}
+                {formik.touched.password && formik.errors.password ? <S.ErrorMessage>{formik.errors.password}</S.ErrorMessage> : null}
 
-                {error && <div style={{ color: "red" }}>{error}</div>}
-                {exito && <div style={{ color: "green" }}>Su usuario se registro con exito</div>}
+                {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
+                {exito && <S.SuccessMessage>Su usuario se registro con exito</S.SuccessMessage>}
                 <S.Boton type="submit" disabled={formik.isSubmitting}>
                     {formik.isSubmitting ? 'Iniciando sesion...' : 'Iniciar sesion'}
                 </S.Boton>

@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 app.set("trust proxy", 1);
 const cors = require("cors");
+
 require("dotenv").config();
 const { connectDB } = require("./db/db.js");
 const path = require("path");
@@ -35,6 +36,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

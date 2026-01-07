@@ -19,7 +19,7 @@ const { notFoundHandler } = require("./middlewares/notFoundHandler.js");
 
 app.use(
   cors({
-    origin: "https://www.casstagenda.com",
+    origin: process.env.CORS_ALLOWED_ORIGINS,
     credentials: true,
   })
 );

@@ -122,13 +122,15 @@ exports.userLogIn = async (req, res, next) => {
       { expiresIn: "1h" }
     );
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     const cookieOptions = {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      domain: ".casstagenda.com",
+      secure: isProduction, // HTTPS solo en prod
+      sameSite: isProduction ? "none" : "lax",
+      domain: isProduction ? ".casstagenda.com" : undefined,
       path: "/",
-      maxAge: 24 * 60 * 60 * 1000, // 1 día
+      maxAge: 24 * 60 * 60 * 1000,
     };
 
     res.cookie("token", token, cookieOptions);

@@ -17,25 +17,16 @@ const routerTrainings = require("./routers/trainings.routes.js");
 const { loggerMiddleware } = require("./middlewares/logger.js");
 const { notFoundHandler } = require("./middlewares/notFoundHandler.js");
 
-const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS.split(",").map((o) =>
-  o.trim()
+const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS;
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
 );
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Permitir requests sin origin (Postman, mobile apps)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-
-    return callback(new Error("Not allowed by CORS"));
-  },
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
+//app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

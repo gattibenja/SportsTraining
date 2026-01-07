@@ -17,11 +17,9 @@ const routerTrainings = require("./routers/trainings.routes.js");
 const { loggerMiddleware } = require("./middlewares/logger.js");
 const { notFoundHandler } = require("./middlewares/notFoundHandler.js");
 
-const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS;
-
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: "https://www.casstagenda.com",
     credentials: true,
   })
 );

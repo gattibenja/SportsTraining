@@ -159,10 +159,14 @@ exports.userLogIn = async (req, res, next) => {
 };
 
 exports.logOut = async (req, res, next) => {
+  const isProduction = process.env.NODE_ENV === "production";
+
   res.clearCookie("token", {
     httpOnly: true,
-    secure: true,
-    sameSite: "none",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    domain: isProduction ? ".casstagenda.com" : undefined,
+    path: "/",
   });
 
   res.json({ message: "Logout exitoso" });

@@ -32,8 +32,8 @@ app.use(loggerMiddleware);
 
 app.get("/", (req, res) => {
   res.json({
-    message: "API de Muebleria Jota Hermanos operativa.",
-    endpoints: "/api/productos",
+    message: "API de Sports Training operativa.",
+    endpoints: "",
   });
 });
 

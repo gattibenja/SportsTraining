@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+h1,
+h2,
+h3,
+p,
+span {
+  -webkit-text-fill-color: currentColor;
+}
 
 :root {
   --bg: #0b0f14;
@@ -15,7 +22,8 @@
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   --radius: 18px;
 
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    Helvetica, Arial;
   line-height: 1.5;
   font-weight: 400;
 
@@ -46,12 +54,21 @@ a:hover {
 
 body {
   margin: 0;
-  background: radial-gradient(1200px 800px at 10% 0%, #132034 0%, var(--bg) 55%);
+  background: radial-gradient(
+    1200px 800px at 10% 0%,
+    #132034 0%,
+    var(--bg) 55%
+  );
   min-width: 320px;
   min-height: 100vh;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
   font-weight: 800;
 }
@@ -140,7 +157,11 @@ textarea:focus {
 
 .card {
   margin-top: 14px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 255, 255, 0)
+  );
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 16px;
@@ -192,10 +213,25 @@ label {
 }
 
 /* Page header & create button */
-.page-header{ display:flex; align-items:center; gap:16px; }
-.page-header h2{ margin:0; font-size:1.4rem; }
-.create-btn{ padding:10px 16px; font-weight:700; border-radius:12px; box-shadow:0 8px 24px rgba(10,30,60,0.25); min-width:150px; }
-.create-btn:hover{ transform:translateY(-2px); }
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.page-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+.create-btn {
+  padding: 10px 16px;
+  font-weight: 700;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(10, 30, 60, 0.25);
+  min-width: 150px;
+}
+.create-btn:hover {
+  transform: translateY(-2px);
+}
 
 .row {
   display: flex;
@@ -469,9 +505,53 @@ button:focus-visible {
 }
 
 /* Modal global styles to match theme */
-.modal-overlay{ position:fixed; inset:0; background:rgba(2,6,23,0.6); display:flex; align-items:center; justify-content:center; z-index:1000; backdrop-filter: blur(4px); }
-.modal{ background:var(--card); color:var(--txt); padding:20px; border-radius:var(--radius); width:min(720px,94%); max-height:90vh; overflow:auto; position:relative; box-shadow:var(--shadow); animation:ut-pop .12s ease; border:1px solid var(--border); }
-.modal-close{ position:absolute; right:12px; top:12px; background:rgba(255,255,255,0.03); border:1px solid var(--border); color:var(--txt); width:36px; height:36px; border-radius:10px; font-size:20px; cursor:pointer; }
-.modal-close:hover{ background:rgba(134, 37, 37, 0.05); }
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+.modal {
+  background: var(--card);
+  color: var(--txt);
+  padding: 20px;
+  border-radius: var(--radius);
+  width: min(720px, 94%);
+  max-height: 90vh;
+  overflow: auto;
+  position: relative;
+  box-shadow: var(--shadow);
+  animation: ut-pop 0.12s ease;
+  border: 1px solid var(--border);
+}
+.modal-close {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  color: var(--txt);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+.modal-close:hover {
+  background: rgba(134, 37, 37, 0.05);
+}
 
-@keyframes ut-pop { from { transform: scale(0.98); opacity:0 } to { transform: scale(1); opacity:1 } }
+@keyframes ut-pop {
+  from {
+    transform: scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

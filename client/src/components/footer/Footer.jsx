@@ -1,20 +1,24 @@
 import React from "react";
-import * as S from "./footer"
+import * as S from "./footer";
 
-export default function Footer(){
+export default function Footer() {
+  return (
+    <>
+      <S.Container>
+        <S.ContainerLinks>
+          <div className="text-[0.7rem]">
+            <span className="text-emerald-400 font-bold">{"</>"} </span>
+            <span className="text-gray-500">Desarrollado por </span>
+            <strong className="text-emerald-400 font-black">
+              Benjamin Pablo Gatti
+            </strong>
+          </div>
 
-    return(
-        <>
-        <S.Container>
-            <S.ContainerLinks>
-                    <S.Link href="">Acerca de nosotros</S.Link>
-                    <S.Link href="">Términos y condiciones</S.Link>
-                    <S.Link href="">Política de privacidad</S.Link>
-                    <S.Link href="https://www.instagram.com/CASST" target="_blank">Preguntas frecuentes</S.Link>
-            </S.ContainerLinks>
-            <S.Copyright>&copy; 2025 CASST. Todos los derechos reservados.</S.Copyright>
-        </S.Container>
-        
-        </> 
-    )
+          <S.Copyright>
+            © 2026 CASST. Todos los derechos reservados.
+          </S.Copyright>
+        </S.ContainerLinks>
+      </S.Container>
+    </>
+  );
 }

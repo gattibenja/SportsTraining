@@ -16,11 +16,11 @@ export const bannerAbout = styled.main`
   align-items: center;
   justify-content: center;
   max-width: 1100px;
-  height: 60vh;
+  min-height: 69vh;
   margin: 12px auto 48px;
   padding: 20px;
   box-sizing: border-box;
-  margin-bottom: 70px;
+
   @media (max-width: 900px) {
     flex-direction: column-reverse;
     padding: 16px;

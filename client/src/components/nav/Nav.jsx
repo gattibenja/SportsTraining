@@ -13,7 +13,7 @@ function Navbar() {
   return (
     <div>
       <S.Nav>
-        <S.logo>CASST</S.logo>
+        <S.logo className="text-white">CASST</S.logo>
         <S.Lista open={menuOpen}>
           <S.Links
             to="/"

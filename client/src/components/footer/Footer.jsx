@@ -8,7 +8,7 @@ export default function Footer() {
         <S.ContainerLinks>
           <div className="text-[0.7rem]">
             <span className="text-emerald-400 font-bold">{"</>"} </span>
-            <span className="text-gray-500">Desarrollado por </span>
+            <span className="text-gray-500">{"Desarrollado por"} </span>
             <strong className="text-emerald-400 font-black">
               Benjamin Pablo Gatti
             </strong>

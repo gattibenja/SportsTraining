@@ -24,6 +24,7 @@ exports.userSignUp = async (req, res, next) => {
       !email ||
       !password ||
       !nombre ||
+      !apellido ||
       !dni ||
       !role ||
       !deporte ||
@@ -38,6 +39,7 @@ exports.userSignUp = async (req, res, next) => {
       !email ||
       !password ||
       !nombre ||
+      !apellido ||
       !dni ||
       !role ||
       !deporte ||
@@ -70,6 +72,7 @@ exports.userSignUp = async (req, res, next) => {
       email,
       password: hashedPassword,
       nombre,
+      apellido,
       dni,
       role,
       deporte,

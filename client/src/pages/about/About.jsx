@@ -13,7 +13,7 @@ function About() {
       <S.bannerAbout>
         <S.textContainer>
           <S.lead>Potenciamos al atleta a través de datos reales</S.lead>
-          <S.text>
+          <S.text className="text-justify">
             Sports Training nace para que entrenadores y atletas tomen
             decisiones basadas en información. Registramos entrenamientos,
             monitorizamos carga y bienestar, y entregamos una visión clara para

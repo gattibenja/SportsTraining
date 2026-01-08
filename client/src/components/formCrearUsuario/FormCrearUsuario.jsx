@@ -48,7 +48,6 @@ export default function FormCrearUsuarios({ onRegistrationSuccess }) {
       }),
     }),
     onSubmit: async (values, { setSubmitting, resetForm }) => {
-      console.log("Datos a enviar: ", values);
       console.log("Intentando conectar a:", `${BASE_URL}/api/users/signUp`);
       try {
         setError("");

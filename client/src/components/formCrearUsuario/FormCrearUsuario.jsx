@@ -231,8 +231,8 @@ export default function FormCrearUsuarios({ onRegistrationSuccess }) {
                 <option value="Tenis">Tenis</option>
                 <option value="Rugby">Rugby</option>
                 <option value="Futbol">Fútbol</option>
-                <option value="Vóley">Vóley</option>
-                <option value="Básquet">Básquet</option>
+                <option value="Voley">Vóley</option>
+                <option value="Basquet">Básquet</option>
                 <option value="Handball">Handball</option>
               </S.Select>
               {formik.touched.deporte && formik.errors.deporte && (

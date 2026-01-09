@@ -228,12 +228,16 @@ export default function FormCrearUsuarios({ onRegistrationSuccess }) {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               >
+                <option value="Futbol">Fútbol</option>
                 <option value="Tenis">Tenis</option>
                 <option value="Rugby">Rugby</option>
-                <option value="Futbol">Fútbol</option>
                 <option value="Voley">Vóley</option>
                 <option value="Basquet">Básquet</option>
                 <option value="Handball">Handball</option>
+                <option value="Natacion">Natacion</option>
+                <option value="Hockey">Hockey</option>
+                <option value="Crossfit">Crossfit</option>
+                <option value="Padel">Padel</option>
               </S.Select>
               {formik.touched.deporte && formik.errors.deporte && (
                 <S.ErrorBox>{formik.errors.deporte}</S.ErrorBox>

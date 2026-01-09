@@ -16,7 +16,7 @@ export default function FormCrearUsuarios({ onRegistrationSuccess }) {
       nombre: "",
       apellido: "",
       role: "atleta",
-      deporte: "Fútbol",
+      deporte: "Futbol",
       posicion: "",
       club: "",
       dni: "",

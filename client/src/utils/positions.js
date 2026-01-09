@@ -64,6 +64,7 @@ export function getPositionsForSport(sport) {
     return POSITIONS[key] || [];
   } catch (e) {
     // fallback simple match
+    console.error(e.message);
     const key =
       Object.keys(POSITIONS).find(
         (k) => k.toLowerCase() === (sport || "").toLowerCase()

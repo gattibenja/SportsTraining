@@ -5,8 +5,12 @@ import * as S from "./about.js";
 import Footer from "../../components/footer/Footer.jsx";
 const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || "";
 const aboutImage = `${BASE_URL}/imagenes/aboutImage2.jpg`;
+import { useContext } from "react";
+import { AuthContext } from "../../auth/AuthContext.js";
 
 function About() {
+  const { user } = useContext(AuthContext);
+
   return (
     <>
       <S.Title>Acerca de CASST</S.Title>
@@ -23,15 +27,22 @@ function About() {
           </S.text>
 
           <S.features>
-            <li>Registro simple y seguro de sesiones</li>
-            <li>Visión de carga y RPE por atleta</li>
-            <li>Filtros por deporte, posición y club</li>
+            <li className="list-disc">Registro simple y seguro de sesiones</li>
+            <li className="list-disc">Visión de carga y RPE por atleta</li>
+            <li className="list-disc">Filtros por deporte, posición y club</li>
           </S.features>
 
-          <S.ctaRow>
-            <S.cta href="/user/login">Comenzar ahora</S.cta>
-            <S.secondary to="/contact">Contactanos</S.secondary>
-          </S.ctaRow>
+          {user ? (
+            <S.ctaRow>
+              <S.cta href="/athlete/trainings">Entrenamientos</S.cta>
+              {/*<S.secondary to="/contact">Contactanos</S.secondary>*/}
+            </S.ctaRow>
+          ) : (
+            <S.ctaRow>
+              <S.cta href="/user/login">Comenzar ahora</S.cta>
+              {/*<S.secondary to="/contact">Contactanos</S.secondary>*/}
+            </S.ctaRow>
+          )}
         </S.textContainer>
 
         <S.imageContainer>

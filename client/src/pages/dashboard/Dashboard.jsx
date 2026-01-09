@@ -77,15 +77,14 @@ function Dashboard() {
   return (
     <>
       <div className="app-container">
-        <section className="page-header">
+        <section className="page-header flex flex-col mt-4 text-white">
           <h1>CASST</h1>
           <p>Gestión integral de entrenamientos y atletas</p>
         </section>
 
-        <section className="card">
-          <div className="header-line">
-            <h2>Inicio</h2>
-            <span className="pill">Dashboard</span>
+        <section className="card ">
+          <div className="header-line ">
+            <span className="pill my-4 ">Dashboard</span>
           </div>
 
           <p className="muted">

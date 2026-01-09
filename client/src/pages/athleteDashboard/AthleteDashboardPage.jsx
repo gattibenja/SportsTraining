@@ -5,7 +5,7 @@ import * as S from "./AthleteDashboardPage.styles.js";
 export default function AthleteDashboardPage() {
   return (
     <S.Main className="container">
-      <h2 className="text-center">Mi Dashboard</h2>
+      <h2 className="text-center text-white">Mi Dashboard</h2>
       <S.Content>
         <AthleteDashboard />
       </S.Content>

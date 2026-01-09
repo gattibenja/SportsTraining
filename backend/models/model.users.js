@@ -36,7 +36,19 @@ const userSchema = new mongoose.Schema(
     },
     deporte: {
       type: String,
-      enum: ["Tenis", "Futbol", "Voley", "Rugby", "Handball", "Basquet"],
+      enum: [
+        "Tenis",
+        "Futbol",
+        "Voley",
+        "Rugby",
+        "Handball",
+        "Basquet",
+        "Hockey",
+        "Crossfit",
+        "Gimnasio",
+        "Padel",
+        "Natacion",
+      ],
     },
     posicion: {
       type: String,

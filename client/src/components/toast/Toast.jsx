@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import styled, { keyframes, css } from 'styled-components';
+import React, { useEffect } from "react";
+import styled, { keyframes, css } from "styled-components";
 
 const fadeIn = keyframes`
   from {
@@ -24,63 +24,91 @@ const fadeOut = keyframes`
 `;
 
 const ToastWrapper = styled.div`
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0));
-    color: var(--txt);
-    padding: 12px 14px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-width: 250px;
-    animation: ${fadeIn} 0.3s ease-out forwards;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 255, 255, 0)
+  );
+  color: var(--txt);
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 250px;
+  animation: ${fadeIn} 0.3s ease-out forwards;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 
-    ${({ type }) => {
-        if (type === 'success') return css`
-            border-color: rgba(77, 255, 181, 0.3);
-            background: linear-gradient(180deg, rgba(77, 255, 181, 0.08), rgba(77, 255, 181, 0.02));
-        `;
-        if (type === 'error') return css`
-            border-color: rgba(255, 77, 94, 0.3);
-            background: linear-gradient(180deg, rgba(255, 77, 94, 0.08), rgba(255, 77, 94, 0.02));
-        `;
-        return css`
-            border-color: rgba(74, 163, 255, 0.3);
-            background: linear-gradient(180deg, rgba(74, 163, 255, 0.08), rgba(74, 163, 255, 0.02));
-        `;
-    }}
+  @media (max-width: 768px) {
+    min-width: 0;
+    width: 80vw;
+  }
 
-    &.exiting {
-        animation: ${fadeOut} 0.3s ease-in forwards;
-    }
+  ${({ type }) => {
+    if (type === "success")
+      return css`
+        border-color: rgba(77, 255, 181, 0.3);
+        background: linear-gradient(
+          180deg,
+          rgba(77, 255, 181, 0.08),
+          rgba(77, 255, 181, 0.02)
+        );
+      `;
+    if (type === "error")
+      return css`
+        border-color: rgba(255, 77, 94, 0.3);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 77, 94, 0.08),
+          rgba(255, 77, 94, 0.02)
+        );
+      `;
+    return css`
+      border-color: rgba(74, 163, 255, 0.3);
+      background: linear-gradient(
+        180deg,
+        rgba(74, 163, 255, 0.08),
+        rgba(74, 163, 255, 0.02)
+      );
+    `;
+  }}
+
+  &.exiting {
+    animation: ${fadeOut} 0.3s ease-in forwards;
+  }
 `;
 
 const Message = styled.span`
-    margin-right: 12px;
-    font-size: 14px;
-    font-weight: 500;
+  margin-right: 12px;
+  font-size: 14px;
+  font-weight: 500;
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
 `;
 
 const CloseButton = styled.button`
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-size: 18px;
-    cursor: pointer;
-    padding: 0 4px;
-    transition: 0.15s color;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: 0.15s color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    &:hover {
-        color: var(--txt);
-    }
+  &:hover {
+    color: var(--txt);
+  }
 `;
 
 const Toast = ({ message, type, onClose }) => {
+  //COMPONENTE DE TOAST TIPO INFORMACION CON LOS PROPS QUE SE LE PASAN EN ToastContainer
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();

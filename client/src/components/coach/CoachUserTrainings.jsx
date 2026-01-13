@@ -5,12 +5,14 @@ import "../../components/userTrainings/UserTrainings.css";
 import { format } from "date-fns";
 import AthleteDashboard from "../athlete/AthleteDashboard.jsx";
 import * as CS from "./CoachUserTrainings.styles.js";
+import { useToast } from "../../auth/ToastContext.js";
 
 export default function CoachUserTrainings({ userId, onClose, user }) {
   const [trainings, setTrainings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
   const [showDashboard, setShowDashboard] = useState(false);
+  const { addToast } = useToast();
 
   useEffect(() => {
     async function load() {
@@ -30,6 +32,29 @@ export default function CoachUserTrainings({ userId, onClose, user }) {
     }
     if (userId) load();
   }, [userId]);
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("¿Estás seguro de que quieres eliminar este entrenamiento?")) return;
+
+    try {
+        const res = await fetch(`${BASE_URL}/api/trainings/delete/${id}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.message || 'Error al eliminar');
+        }
+
+        addToast('Entrenamiento eliminado correctamente', 'success');
+        setTrainings(trainings.filter(t => t._id !== id));
+        setSelected(null);
+    } catch (err) {
+        addToast(err.message, 'error');
+        console.error(err);
+    }
+  };
 
   if (loading)
     return (
@@ -175,6 +200,7 @@ export default function CoachUserTrainings({ userId, onClose, user }) {
                 <strong>Notas:</strong> {selected.notas}
               </div>
             )}
+            <button className="ut-delete-btn" onClick={() => handleDelete(selected._id)}>Eliminar</button>
           </div>
         </div>
       )}

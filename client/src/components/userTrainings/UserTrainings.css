@@ -19,3 +19,21 @@
 .ut-loading, .ut-empty{ padding:20px; color:var(--muted); }
 
 @keyframes ut-pop { from { transform: scale(0.98); opacity:0 } to { transform: scale(1); opacity:1 } }
+
+.ut-delete-btn {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 20px;
+    transition: background-color 0.2s;
+}
+
+.ut-delete-btn:hover {
+    background-color: #dc2626;
+}
+

@@ -9,7 +9,7 @@ export default function UserTrainings({ refresh }){
     const [trainings, setTrainings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selected, setSelected] = useState(null);
-    const { addToast } = useToast();
+    const { addToast, addConfirmationToast } = useToast();
 
     useEffect(() => {
         async function load(){
@@ -26,6 +26,30 @@ export default function UserTrainings({ refresh }){
         }
         load();
     }, [refresh, addToast]);
+
+    const handleDelete = (id) => {
+        addConfirmationToast('¿Estás seguro de que quieres eliminar este entrenamiento?', async () => {
+            try {
+                const res = await fetch(`${BASE_URL}/api/trainings/delete/${id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+    
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    throw new Error(errorData.message || 'Error al eliminar');
+                }
+    
+                addToast('Entrenamiento eliminado correctamente', 'success');
+                setTrainings(trainings.filter(t => t._id !== id));
+                setSelected(null);
+            } catch (err) {
+                addToast(err.message, 'error');
+                console.error(err);
+            }
+        });
+    };
+
 
     if(loading) return <div className="ut-loading">Cargando registros...</div>
 
@@ -69,6 +93,8 @@ export default function UserTrainings({ refresh }){
                         <div className="ut-detail-row"><strong>Hidratación:</strong> {selected.hidratacion || 'N/A'}</div>
                         <div className="ut-detail-row"><strong>Cumplimiento objetivo:</strong> {selected.cumplimientoObjetivo ? 'Sí' : 'No'}</div>
                         {selected.notas && <div className="ut-detail-row"><strong>Notas:</strong> {selected.notas}</div>}
+                        <button className="ut-delete-btn" onClick={() => handleDelete(selected._id)}>Eliminar</button>
+
                     </div>
                 </div>
             )}

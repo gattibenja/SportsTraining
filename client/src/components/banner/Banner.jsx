@@ -1,10 +1,13 @@
+/* eslint-disable no-unused-vars */
 //import React  from "react";
+
 import * as S from "./BannerStyles.js";
 import { useContext } from "react";
 import { AuthContext } from "../../auth/AuthContext.js";
 const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || "";
 const bannerImage = `${BASE_URL}/imagenes/bannerImage.jpg`;
 import { easeOut, motion } from "framer-motion";
+
 //const bannerImage = "https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80";
 
 function Banner() {

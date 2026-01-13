@@ -72,7 +72,7 @@ const ConfirmButton = styled(Button)`
 `;
 
 const ConfirmationToast = ({ message, onConfirm, onCancel }) => {
-  //COMPONENTE DE TOAST TIPO INFORMACION CON LOS PROPS QUE SE LE PASAN EN ToastContainer
+  //COMPONENTE DE TOAST TIPO CONFIRMACION CON LOS PROPS QUE SE LE PASAN EN ToastContainer
   return (
     <ToastWrapper>
       <Message>{message}</Message>

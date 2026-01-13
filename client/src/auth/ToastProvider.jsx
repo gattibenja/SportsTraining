@@ -7,11 +7,13 @@ export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
   const addToast = useCallback((message, type = "info") => {
+    //CALLBACK SE USA PARA QUE LA FUNCION SE CREE UNA SOLA VEZ DEFINITIVAMENTE Y QUE NO SE RE-RENDERICEN LOS COMPONENTES QUE USAR EL CONTEXTO AL AGREGAR UN NUEVO TOAST
     const id = Date.now() + Math.random();
     setToasts((prevToasts) => [...prevToasts, { id, message, type }]);
   }, []);
 
   const removeToast = useCallback((id) => {
+    //CALLBACK SE USA PARA QUE LA FUNCION SE CREE UNA SOLA VEZ DEFINITIVAMENTE Y QUE NO SE RE-RENDERICEN LOS COMPONENTES QUE USAR EL CONTEXTO AL AGREGAR UN NUEVO TOAST
     setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
   }, []);
 
